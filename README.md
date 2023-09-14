@@ -53,4 +53,4 @@ Before installing this plugin, please keep in mind that at this time we only sup
 
 ## License
 
-Distributed under the MIT License. See [LICENSE](https://github.com/SantioMC/MinehutVotes/blob/main/LICENSE.md) for more information.
+Distributed under the MIT License. See [LICENSE](https://github.com/SantioMC/MinehutVotes/blob/master/LICENSE) for more information.
