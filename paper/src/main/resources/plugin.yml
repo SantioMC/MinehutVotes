@@ -1,0 +1,7 @@
+name: MinehutVotes
+version: '${version}'
+main: me.santio.paper.MinehutVotes
+api-version: '1.13'
+authors: [ Santio71 ]
+description: A plugin used to reward your players for votes on Minehut
+website: https://modrinth.com/mod/minehutvotes
