@@ -8,12 +8,17 @@
     <a href="https://github.com/SantioMC/MinehutVotes/issues">Report Bug</a>
     —
     <a href="https://github.com/SantioMC/MinehutVotes/issues">Request Feature</a>
+
   </p>
 </p>
+
+<div align="center">
 
 ![Contributors](https://img.shields.io/github/contributors/SantioMC/MinehutVotes?color=dark-green)
 ![Issues](https://img.shields.io/github/issues/SantioMC/MinehutVotes)
 ![License](https://img.shields.io/github/license/SantioMC/MinehutVotes)
+
+</div>
 
 ## Table Of Contents
 
