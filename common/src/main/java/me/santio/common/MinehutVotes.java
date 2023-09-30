@@ -1,34 +1,57 @@
 package me.santio.common;
 
-import lombok.SneakyThrows;
-import lombok.val;
-import me.santio.common.bucket.Bucket;
-import me.santio.common.models.Vote;
+import kong.unirest.*;
+import me.santio.common.common.BuildConfig;
 import me.santio.common.services.VoteService;
 
-import java.net.http.HttpClient;
-import java.time.Duration;
-
-
-@SuppressWarnings("MissingJavadoc")
-public class MinehutVotes {
+/**
+ * A utility class for interacting with the Minehut Votes API.
+ */
+@SuppressWarnings("WeakerAccess")
+public final class MinehutVotes {
+    private MinehutVotes() {}
     
-    private static final HttpClient client = HttpClient.newHttpClient();
+    private static final String INFERRED_SERVER_ID = System.getenv("SERVER_ID");
     
-    @SneakyThrows
-    public static void main(String[] args) {
-        // TODO: Remove code used for testing
-        Vote vote = new Vote(
-            "success",
-            "2023-09-28T15:23:38.721360-06:00"
-        );
+    /**
+     * The base URL for the Minehut API.
+     */
+    public static final String BASE_URL = "https://api.beta.minehut.com";
+    
+    private static final UnirestInstance client = new UnirestInstance(
+        new Config().connectTimeout(5000)
+            .setDefaultHeader("Accept", "application/json")
+            .setDefaultHeader("Content-Type", "application/json")
+            .setDefaultHeader("User-Agent", "MinehutVotes/" + BuildConfig.PLUGIN_VERSION)
+            .defaultBaseUrl(envOr("MINEHUT_VOTES_API", BASE_URL))
+    );
+    
+    private static String envOr(String key, String fallback) {
+        final String value = System.getenv(key);
+        return value == null ? fallback : value;
+    }
+    
+    /**
+     * Closes any resources used by the Minehut Votes client.
+     */
+    public static void close() {
+        client.shutDown();
+    }
+    
+    /**
+     * Authenticate the Minehut Votes client, allowing it to make authenticated requests to the API.
+     * You will receive a {@link me.santio.common.exceptions.InvalidMinehutTokenException} if you don't run this method.
+     * @param server The Server ID for the server you want to check votes for.
+     * @param token The token to authenticate with.
+     * @return A {@link VoteService} instance for the server.
+     */
+    public static VoteService authenticate(String server, String token) {
+        final String serverId = server.trim().toLowerCase().startsWith("auto")
+            ? INFERRED_SERVER_ID
+            : server.trim().toLowerCase();
         
-        val service = new VoteService();
-        
-        val res = service.request(client, "698cb96d-5bf2-42ad-a82c-0f638637737a", "Santio71").get();
-        System.out.println("Response received");
-        System.out.println(res.statusCode());
-        System.out.println(res.body());
+        client.config().setDefaultHeader("Authorization", "Bearer " + token);
+        return new VoteService(serverId, client);
     }
 
 }
