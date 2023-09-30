@@ -1,0 +1,20 @@
+#
+# MinehutVotes
+#  This is the main configuration file for the plugin, please read the comments
+#  carefully to understand what each option does.
+#
+
+# Server ID
+#  This is the ID of your server, you can find it by going to
+#  https://api.minehut.com/server/<server_name>?byName=true OR
+#  you can leave it set to "auto" and it will automatically get the ID
+#
+#  Please note that "auto" will only work on single servers, if you're running
+#  an external server or a network, you will likely need to manually set this to the
+#  ID of your server yourself.
+server_id: auto
+
+# API Key
+#  This is an API key that you can get from <put the link here, soon:tm:>
+#  This token must have access to the server and should be kept private.
+api_key: "eyJhbG00000000000enter.token.here"
