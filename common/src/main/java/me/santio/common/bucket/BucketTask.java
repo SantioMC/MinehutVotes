@@ -11,6 +11,6 @@ public interface BucketTask<T> {
      * The task to be ran by the bucket.
      * @param item The item to run the task on.
      */
-    void run(T item);
+    void run(T item, boolean done);
     
 }

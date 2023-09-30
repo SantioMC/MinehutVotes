@@ -65,6 +65,16 @@ public class Bucket<T> extends TimerTask {
     }
     
     /**
+     * Adds an item to the bucket.
+     * @param item The item to add to the bucket.
+     * @return The bucket.
+     */
+    public Bucket<T> add(T item) {
+        items.add(item);
+        return this;
+    }
+    
+    /**
      * Gets the next item in the bucket.
      * @return The next item in the bucket.
      */
@@ -85,7 +95,7 @@ public class Bucket<T> extends TimerTask {
     
     private void handle(T item) {
         for (BucketTask<T> listener : listeners) {
-            listener.run(item);
+            listener.run(item, items.isEmpty());
         }
     }
     

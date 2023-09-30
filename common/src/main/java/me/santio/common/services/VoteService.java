@@ -3,12 +3,16 @@ package me.santio.common.services;
 import com.google.gson.Gson;
 import kong.unirest.HttpResponse;
 import kong.unirest.UnirestInstance;
+import me.santio.common.bucket.Bucket;
+import me.santio.common.bucket.BucketTask;
 import me.santio.common.exceptions.InvalidMinehutEndpointException;
 import me.santio.common.exceptions.InvalidMinehutTokenException;
 import me.santio.common.exceptions.MinehutException;
 import me.santio.common.exceptions.MismatchedMinehutTokenException;
 import me.santio.common.models.Vote;
 
+import java.time.Duration;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -77,12 +81,25 @@ public class VoteService {
     /**
      * Sends a batch request to the Minehut API to check if multiple players have for a server.
      * @param usernames The usernames to check.
-     * @return A future that will be completed with the response.
+     * @param task The task to run when a response is received.
+     * @return A bucket that will be filled with the responses.
      */
-    public CompletableFuture<HttpResponse<String>> requestBatch(
-        String... usernames
+    @SuppressWarnings("FeatureEnvy")
+    public Bucket<HttpResponse<String>> requestBatch(
+        Iterable<String> usernames,
+        BucketTask<HttpResponse<String>> task
     ) {
-        return null;
+        final Bucket<HttpResponse<String>> bucket = Bucket.<HttpResponse<String>>builder()
+            .delay(Duration.ofSeconds(1))
+            .buffer(30)
+            .listener(task)
+            .build();
+        
+        usernames.forEach(username -> {
+            this.request(username).thenAccept(bucket::add);
+        });
+        
+        return bucket.start();
     }
     
     
